@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -77,7 +79,7 @@ public class RemoteHTable implements HTableInterface {
 
   @SuppressWarnings("unchecked")
   protected String buildRowSpec(final byte[] row, final Map familyMap, 
-      final long startTime, final long endTime, final int maxVersions) {
+      final long startTime, final long endTime, final int maxVersions) throws URIException {
     StringBuffer sb = new StringBuffer();
     sb.append('/');
     if (accessToken != null) {
@@ -86,7 +88,7 @@ public class RemoteHTable implements HTableInterface {
     }
     sb.append(Bytes.toStringBinary(name));
     sb.append('/');
-    sb.append(Bytes.toStringBinary(row));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(row)));
     Set families = familyMap.entrySet();
     if (families != null) {
       Iterator i = familyMap.entrySet().iterator();
@@ -99,14 +101,14 @@ public class RemoteHTable implements HTableInterface {
         if (quals != null && !quals.isEmpty()) {
           Iterator ii = quals.iterator();
           while (ii.hasNext()) {
-            sb.append(Bytes.toStringBinary((byte[])e.getKey()));
+            sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary((byte[])e.getKey())));
             sb.append(':');
             Object o = ii.next();
             // Puts use byte[] but Deletes use KeyValue
             if (o instanceof byte[]) {
-              sb.append(Bytes.toStringBinary((byte[])o));
+              sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary((byte[])o)));
             } else if (o instanceof KeyValue) {
-              sb.append(Bytes.toStringBinary(((KeyValue)o).getQualifier()));
+              sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(((KeyValue)o).getQualifier())));
             } else {
               throw new RuntimeException("object type not handled");
             }
@@ -115,7 +117,7 @@ public class RemoteHTable implements HTableInterface {
             }
           }
         } else {
-          sb.append(Bytes.toStringBinary((byte[])e.getKey()));
+          sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary((byte[])e.getKey())));
           sb.append(':');
         }
         if (i.hasNext()) {
