@@ -287,7 +287,7 @@
             <!--This stops our running tests for each stage of maven release.
                 But it builds the test jar.  From SUREFIRE-172.      
               -->
-            <releaseProfile>hadoop-1.0</releaseProfile>
+            <releaseProfiles>hadoop-1.0</releaseProfiles>
             <arguments>-Dmaven.test.skip.exec</arguments>
           </configuration>
         </plugin>
