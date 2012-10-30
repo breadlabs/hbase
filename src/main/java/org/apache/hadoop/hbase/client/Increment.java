@@ -81,6 +81,15 @@ public class Increment implements Writable {
     }
   }
 
+  public Increment(Increment incrementToCopy) {
+    this(incrementToCopy.getRow(), incrementToCopy.getRowLock());
+    for (Map.Entry<byte[], NavigableMap<byte[], Long>> entry : incrementToCopy.getFamilyMap().entrySet()) {
+      this.familyMap.put(entry.getKey(), entry.getValue());
+    }
+    this.writeToWAL = incrementToCopy.getWriteToWAL();
+    this.tr = incrementToCopy.getTimeRange();
+  }
+
   /**
    * Increment the column from the specific family with the specified qualifier
    * by the specified amount.

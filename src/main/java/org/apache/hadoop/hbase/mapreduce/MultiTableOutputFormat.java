@@ -29,6 +29,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Increment;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -42,9 +43,9 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 /**
  * <p>
  * Hadoop output format that writes to one or more HBase tables. The key is
- * taken to be the table name while the output value <em>must</em> be either a
+ * taken to be the table name while the output value <em>must</em> be either an {@link Increment}, a
  * {@link Put} or a {@link Delete} instance. All tables must already exist, and
- * all Puts and Deletes must reference only valid column families.
+ * all Increments, Puts and Deletes must reference only valid column families.
  * </p>
  *
  * <p>
@@ -113,14 +114,14 @@ public class MultiTableOutputFormat extends OutputFormat<ImmutableBytesWritable,
     }
 
     /**
-     * Writes an action (Put or Delete) to the specified table.
+     * Writes an action (Increment, Put or Delete) to the specified table.
      *
      * @param tableName
      *          the table being updated.
      * @param action
-     *          the update, either a put or a delete.
+     *          the update, either an increment, a put or a delete.
      * @throws IllegalArgumentException
-     *          if the action is not a put or a delete.
+     *          if the action is not an increment, a put or a delete.
      */
     @Override
     public void write(ImmutableBytesWritable tableName, Writable action) throws IOException {
@@ -130,12 +131,16 @@ public class MultiTableOutputFormat extends OutputFormat<ImmutableBytesWritable,
         Put put = new Put((Put) action);
         put.setWriteToWAL(useWriteAheadLogging);
         table.put(put);
+      } else if (action instanceof Increment) {
+        Increment increment = new Increment((Increment)action);
+        increment.setWriteToWAL(useWriteAheadLogging);
+        table.increment(increment);
       } else if (action instanceof Delete) {
         Delete delete = new Delete((Delete) action);
         table.delete(delete);
       } else
         throw new IllegalArgumentException(
-            "action must be either Delete or Put");
+            "action must be either Increment, Delete or Put");
     }
   }
 
