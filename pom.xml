@@ -284,7 +284,6 @@
           <artifactId>maven-release-plugin</artifactId>
           <version>2.2.2</version>
           <configuration>
-            <releaseProfiles>apache-release</releaseProfiles>
             <!--This stops our running tests for each stage of maven release.
                 But it builds the test jar.  From SUREFIRE-172.      
               -->
@@ -888,6 +887,7 @@
     <log4j.version>1.2.16</log4j.version>
     <mockito-all.version>1.8.5</mockito-all.version>
     <protobuf.version>2.4.0a</protobuf.version>
+    <slf4j.version>1.6.1</slf4j.version>
     <stax-api.version>1.0.1</stax-api.version>
     <thrift.version>0.7.0</thrift.version>
     <zookeeper.version>3.4.3</zookeeper.version>
