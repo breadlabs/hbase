@@ -86,7 +86,7 @@ public class RemoteHTable implements HTableInterface {
       sb.append(accessToken);
       sb.append('/');
     }
-    sb.append(Bytes.toStringBinary(name));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(name)));
     sb.append('/');
     sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(row)));
     Set families = familyMap.entrySet();
@@ -234,7 +234,7 @@ public class RemoteHTable implements HTableInterface {
       sb.append(accessToken);
       sb.append('/');
     }
-    sb.append(Bytes.toStringBinary(name));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(name)));
     sb.append('/');
     sb.append("schema");
     for (int i = 0; i < maxRetries; i++) {
@@ -311,9 +311,9 @@ public class RemoteHTable implements HTableInterface {
       sb.append(accessToken);
       sb.append('/');      
     }
-    sb.append(Bytes.toStringBinary(name));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(name)));
     sb.append('/');
-    sb.append(Bytes.toStringBinary(put.getRow()));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(put.getRow())));
     for (int i = 0; i < maxRetries; i++) {
       Response response = client.put(sb.toString(), Constants.MIMETYPE_PROTOBUF,
         model.createProtobufOutput());
@@ -369,7 +369,7 @@ public class RemoteHTable implements HTableInterface {
       sb.append(accessToken);
       sb.append('/');      
     }
-    sb.append(Bytes.toStringBinary(name));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(name)));
     sb.append("/$multiput"); // can be any nonexistent row
     for (int i = 0; i < maxRetries; i++) {
       Response response = client.put(sb.toString(), Constants.MIMETYPE_PROTOBUF,
@@ -438,7 +438,7 @@ public class RemoteHTable implements HTableInterface {
         sb.append(accessToken);
         sb.append('/');
       }
-      sb.append(Bytes.toStringBinary(name));
+      sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(name)));
       sb.append('/');
       sb.append("scanner");
       for (int i = 0; i < maxRetries; i++) {
@@ -596,9 +596,9 @@ public class RemoteHTable implements HTableInterface {
       sb.append(accessToken);
       sb.append('/');
     }
-    sb.append(Bytes.toStringBinary(name));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(name)));
     sb.append('/');
-    sb.append(Bytes.toStringBinary(put.getRow()));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(put.getRow())));
     sb.append("?check=put");
 
     for (int i = 0; i < maxRetries; i++) {
@@ -635,9 +635,9 @@ public class RemoteHTable implements HTableInterface {
       sb.append(accessToken);
       sb.append('/');
     }
-    sb.append(Bytes.toStringBinary(name));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(name)));
     sb.append('/');
-    sb.append(Bytes.toStringBinary(row));
+    sb.append(URIUtil.encodeWithinPath(Bytes.toStringBinary(row)));
     sb.append("?check=delete");
 
     for (int i = 0; i < maxRetries; i++) {
