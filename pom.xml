@@ -49,9 +49,9 @@
   </scm>
   <distributionManagement>
     <repository>
-        <id>bread-internal</id>
+        <id>bread</id>
         <name>Bread Internal Releases</name>
-        <url>https://nexus.bre.ad:8089/nexus/content/repositories/bread-internal</url>
+        <url>https://nexus.aws.bre.ad/content/repositories/releases</url>
     </repository>
   </distributionManagement>
 
